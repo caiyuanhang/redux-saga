@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>generator</title>
+</head>
+
+<body>
+    <script>
+        // 生成器函数
+        function* exampleGenerator() {
+            yield 42;
+            return "fin";
+        }
+
+        // 生成器函数返回一个迭代器，迭代器是一个对象（非空），迭代器跟踪自己在序列中的位置，并返回序列中的下一个值。
+        exampleGenerator();
+        console.log(exampleGenerator());
+
+        // 迭代器有一个next方法，执行next方法会得到一个{value: any, done: boolean }，对象包含两个属性，value表示yield输出的内容，done为false表示继续调用，生成器将提供更多的数据。
+        let one = exampleGenerator().next();
+        let two = exampleGenerator().next();
+        let thr = exampleGenerator().next();
+        console.log("one：", one, "two：", two, "thr：", thr);
+
+        // 为什么one、two、thr的值都一样呢？因为每执行一次exampleGenerator都会返回一个新的迭代器，需要将迭代器保存到变量中，再用变量来调用next方法。
+        let four = exampleGenerator();
+        console.log("one的next()：", four.next(), four.next(), four.next());
+    </script>
+    <script>
+        // 在生成器函数中使用死循环是有效的。
+        function* optimisticMagicEightBall() {
+            while (true) {
+                yield "Yup, definitely";
+            }
+        }
+
+        let fiv = optimisticMagicEightBall();
+        console.log("无限循环在生成器函数中是有效的：", fiv.next(), fiv.next(), fiv.next());
+    </script>
+    <script>
+        // 组合生成器函数
+        function* count(){
+            yield 1;
+            yield 2;
+            // yield*语法用于将当前执行权委托给另外一个生成器函数。
+            yield* middleNumbers();
+            yield 5;
+        }
+
+        function* middleNumbers(){
+            yield 3;
+            yield 4;
+        }
+
+        const fix = count();
+        console.log("组合生成器函数：",fix.next(),fix.next(),fix.next(),fix.next(),fix.next(),fix.next());
+    </script>
+</body>
+
+</html>
